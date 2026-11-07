@@ -3,12 +3,13 @@
 #include <conio.h>
 #include <stdbool.h>
 
+//structure representing a task and its completion status.
 struct task{
     int id;
     char description[200];
     bool completed;
 };
-
+// adds new task to the list and updates the task count
 void AddTask(struct task tasks[], int *count){
      if(*count < 100){tasks[*count].id = *count + 1;
     printf("enter task: ");
@@ -21,6 +22,35 @@ void AddTask(struct task tasks[], int *count){
         }
 }
 
+void DeleteTask(struct task tasks[], int *count){
+        
+    int id;
+    bool found = false;
+
+    printf("Enter the ID of the task you would like to Delete: ");
+    scanf("%d", &id);
+
+    for(int i = 0; i < *count; i++){
+        if(id == tasks[i].id){
+            for(int j = i; j < *count - 1; j++){
+                tasks[j]=tasks[j+1];
+            }
+            found = true;
+            *count = *count - 1;
+            for(int k = 0; k < *count; k++){
+                tasks[k].id = k + 1;
+            }
+            break;
+        }
+    }
+    if(found == false){
+        printf("Task not found");
+    }
+
+    }
+
+
+// displays all the tasks along with their ID's and completion status
 void ViewTasks(struct task tasks[], int count){
     for(int i = 0; i < count; i++){
         printf("ID: %d\n", tasks[i].id);
@@ -28,9 +58,10 @@ void ViewTasks(struct task tasks[], int count){
         printf("Status: %d\n", tasks[i].completed);
     }
 }
-
+// searches for a task by id and marks it as completed if found
 void MarkTaskDone(struct task tasks[], int count){
     int id;
+    // tracks whether the requested task ID exists in the list
     bool found = false;
 
     printf("enter the Task ID: ");
@@ -41,10 +72,12 @@ void MarkTaskDone(struct task tasks[], int count){
         tasks[i].completed = 1;
         found = true;
         printf("Task Mark as Completed\n");
+        // stops searching once the matching task is found
         break;
     }
     
     }
+    // displays an error message if the requested task ID doesnt exist
     if(found == false){
         printf("Task Not Found\n");
     }
@@ -53,10 +86,11 @@ void MarkTaskDone(struct task tasks[], int count){
 int main(){
   
     int choice=0;
+    // stores up to 100 tasks during program execution
     struct task tasks[100];
     int count = 0;
     
-   
+   // keeps displaying the menu until the user chooses to exit
 do{
     printf("------To-Do Place For Everything------\n");
     printf("What task would you like to perform?\n");
@@ -79,6 +113,13 @@ do{
         AddTask(tasks, &count);
         
         
+    }
+
+    if(choice == 2){
+
+        DeleteTask(tasks, &count);
+
+
     }
 
     if(choice == 5){
